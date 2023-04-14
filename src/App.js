@@ -25,7 +25,7 @@ export default class App extends Component {
     return (
       <div>
 
-        <Router>
+        <Router basename='/BulleTin.Live'>
       <NavBar/>
       <LoadingBar
         height={3}
