@@ -2,7 +2,7 @@ import  './App.css';
 import React, { Component } from 'react';
 import NavBar from './component/NavBar';
 import News from './component/News'
-import { HashRouter, Routes,Route} from 'react-router-dom'
+import { BrowserRouter, Routes,Route} from 'react-router-dom'
 import LoadingBar from 'react-top-loading-bar'
 
 
@@ -28,7 +28,7 @@ export default class App extends Component {
     return (
       <div>
 
-        <HashRouter >
+        <BrowserRouter basename={process.env.PUBLIC_URL} >
       <NavBar/>
       <LoadingBar
         height={3}
@@ -58,7 +58,7 @@ export default class App extends Component {
 
           <Route exact path="/technology" element={<News setProgress={this.setProgress} key="technology" pageSize={this.pageSize} country="in" category="technology" />}></Route>
         </Routes>
-      </HashRouter>
+      </BrowserRouter>
 
 
       

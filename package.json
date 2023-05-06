@@ -1,6 +1,6 @@
 {
   "name": "mynews",
-  "homepage": "https://gitskand.github.io/BulleTin.Live",
+  "homepage": "https://gitskand.github.io/BulleTin.News",
   "version": "0.1.0",
   "private": false,
   "dependencies": {
@@ -23,7 +23,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"  
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
