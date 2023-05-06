@@ -26,6 +26,9 @@ export default class NavBar extends Component {
                                 <li className="nav-item">
                                     <Link className="nav-link " aria-current="page"  to="/health">Health</Link> </li>
 
+                                    <li className="nav-item">
+                                    <Link className="nav-link" aria-current="page"  to="/politics">Politics</Link> </li>
+
                                 <li className="nav-item">
                                     <Link className="nav-link" aria-current="page"  to="/science">Science</Link> </li>
 
@@ -40,6 +43,8 @@ export default class NavBar extends Component {
 
                         </div>
                     </div>
+                  
+
                 </nav>
             </div>
         )

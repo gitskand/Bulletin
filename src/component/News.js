@@ -25,8 +25,11 @@ export class News extends Component {
             page: 1,
             totalResults: 0
         }
-        document.title = `${this.capitalizeFirstLetter(this.props.category)} - BulleTin`;
-    }
+        document.title = `${this.capitalizeFirstLetter(`${this.props.category}`)} - BulleTin`
+       
+    };
+
+    
 
     async updateNews() {
         this.props.setProgress(10);
@@ -69,7 +72,7 @@ export class News extends Component {
         return (
             <>
             
-              <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '80px' }}>BulleTin - Top {this.capitalizeFirstLetter(this.props.category)} Headlines</h1>
+              <h1 className="text-center" style={{ color: ' black',margin: '39px 0px', marginTop: '80px' , textDecoration: 'underline blue 5px' }}>BulleTin - Top {this.capitalizeFirstLetter(this.props.category)} Headlines</h1>
                 {this.state.loading && <Spinner />}
                 <InfiniteScroll
                     dataLength={this.state.articles.length}
