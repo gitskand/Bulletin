@@ -1,6 +1,3 @@
- Local:            http://localhost:3000/Bulletin
- 
-  On Your Network:  http://192.168.43.105:3000/Bulletin
 
 # Getting Started with Create React App
 
