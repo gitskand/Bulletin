@@ -6,7 +6,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 class News extends Component {
   static defaultProps = {
-    country: 'in',
     pageSize: 8,
     category: 'general',
   };
@@ -36,9 +35,7 @@ class News extends Component {
   async updateNews() {
     this.props.setProgress(10);
 
-    const apiKey = process.env.REACT_APP_NEWSAPI_KEY;
-
-    const url = `https://newsapi.org/v2/everything?q=${this.props.category}&apiKey=${apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    const url = `/api/news?category=${this.props.category}&page=1`;
 
     this.setState({ loading: true });
 
@@ -52,6 +49,7 @@ class News extends Component {
       articles: parsedData.articles || [],
       totalResults: parsedData.totalResults || 0,
       loading: false,
+      page: 1,
     });
 
     this.props.setProgress(100);
@@ -59,15 +57,11 @@ class News extends Component {
 
   async componentDidMount() {
     this.updateNews();
-    console.log("ENV KEY →", process.env.REACT_APP_NEWSAPI_KEY);
-
   }
 
   fetchMoreData = async () => {
     const nextPage = this.state.page + 1;
-    const apiKey = process.env.REACT_APP_NEWSAPI_KEY;
-
-    const url = `https://newsapi.org/v2/everything?q=${this.props.category}&apiKey=${apiKey}&page=${nextPage}&pageSize=${this.props.pageSize}`;
+    const url = `/api/news?category=${this.props.category}&page=${nextPage}`;
 
     let data = await fetch(url);
     let parsedData = await data.json();
@@ -109,7 +103,9 @@ class News extends Component {
                   <NewsItem
                     title={element.title ? element.title.slice(0, 45) : ''}
                     description={
-                      element.description ? element.description.slice(0, 150) : ''
+                      element.description
+                        ? element.description.slice(0, 150)
+                        : ''
                     }
                     imageUrl={element.urlToImage}
                     newsUrl={element.url}

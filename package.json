@@ -1,6 +1,6 @@
 {
   "name": "mynews",
-  "homepage": "https://gitskand.github.io/BulleTin.News",
+  
   "version": "0.1.0",
   "private": false,
   "dependencies": {
