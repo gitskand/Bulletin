@@ -12,10 +12,9 @@ class News extends Component {
   };
 
   static propTypes = {
-    country: PropTypes.string,
     pageSize: PropTypes.number,
     category: PropTypes.string,
-    setProgress: PropTypes.func, // Assuming setProgress is a prop function
+    setProgress: PropTypes.func,
   };
 
   capitalizeFirstLetter = (string) => {
@@ -30,41 +29,53 @@ class News extends Component {
       page: 1,
       totalResults: 0,
     };
-    document.title = `${this.capitalizeFirstLetter(
-      this.props.category
-    )} - BulleTin`;
+
+    document.title = `${this.capitalizeFirstLetter(this.props.category)} - BulleTin`;
   }
 
   async updateNews() {
     this.props.setProgress(10);
-    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=571fdc0e4f964ae3baf4905e6fe915d1&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+
+    const apiKey = process.env.REACT_APP_NEWSAPI_KEY;
+
+    const url = `https://newsapi.org/v2/everything?q=${this.props.category}&apiKey=${apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+
     this.setState({ loading: true });
+
     let data = await fetch(url);
-    this.props.setProgress(30);
+    this.props.setProgress(40);
+
     let parsedData = await data.json();
     this.props.setProgress(70);
+
     this.setState({
-      articles: parsedData.articles,
-      totalResults: parsedData.totalResults,
+      articles: parsedData.articles || [],
+      totalResults: parsedData.totalResults || 0,
       loading: false,
     });
+
     this.props.setProgress(100);
   }
 
   async componentDidMount() {
     this.updateNews();
+    console.log("ENV KEY →", process.env.REACT_APP_NEWSAPI_KEY);
+
   }
 
   fetchMoreData = async () => {
-    this.setState((prevState) => ({
-      page: prevState.page + 1,
-    }));
-    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=571fdc0e4f964ae3baf4905e6fe915d1&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    const nextPage = this.state.page + 1;
+    const apiKey = process.env.REACT_APP_NEWSAPI_KEY;
+
+    const url = `https://newsapi.org/v2/everything?q=${this.props.category}&apiKey=${apiKey}&page=${nextPage}&pageSize=${this.props.pageSize}`;
+
     let data = await fetch(url);
     let parsedData = await data.json();
+
     this.setState((prevState) => ({
-      articles: prevState.articles.concat(parsedData.articles),
-      totalResults: parsedData.totalResults,
+      page: nextPage,
+      articles: prevState.articles.concat(parsedData.articles || []),
+      totalResults: parsedData.totalResults || prevState.totalResults,
     }));
   };
 
@@ -80,14 +91,15 @@ class News extends Component {
             textDecoration: 'underline blue 5px',
           }}
         >
-          BulleTin - Top{' '}
-          {this.capitalizeFirstLetter(this.props.category)} Headlines
+          BulleTin - Top {this.capitalizeFirstLetter(this.props.category)} Headlines
         </h1>
+
         {this.state.loading && <Spinner />}
+
         <InfiniteScroll
           dataLength={this.state.articles.length}
           next={this.fetchMoreData}
-          hasMore={this.state.articles.length !== this.state.totalResults}
+          hasMore={this.state.articles.length < this.state.totalResults}
           loader={<Spinner />}
         >
           <div className="container">
@@ -103,7 +115,7 @@ class News extends Component {
                     newsUrl={element.url}
                     author={element.author}
                     date={element.publishedAt}
-                    source={element.source.name}
+                    source={element.source?.name || 'Unknown'}
                   />
                 </div>
               ))}
